@@ -1,0 +1,11 @@
+C:\Users\Victor Bravo Sánchez\Downloads\project-bolt-sb1-d296xxbx\project\src\LendingService.Core\obj\Debug\net7.0\LendingService.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Victor Bravo Sánchez\Downloads\project-bolt-sb1-d296xxbx\project\src\LendingService.Core\obj\Debug\net7.0\LendingService.Core.AssemblyInfoInputs.cache
+C:\Users\Victor Bravo Sánchez\Downloads\project-bolt-sb1-d296xxbx\project\src\LendingService.Core\obj\Debug\net7.0\LendingService.Core.AssemblyInfo.cs
+C:\Users\Victor Bravo Sánchez\Downloads\project-bolt-sb1-d296xxbx\project\src\LendingService.Core\obj\Debug\net7.0\LendingService.Core.csproj.CoreCompileInputs.cache
+C:\Users\Victor Bravo Sánchez\Downloads\project-bolt-sb1-d296xxbx\project\src\LendingService.Core\bin\Debug\net7.0\LendingService.Core.deps.json
+C:\Users\Victor Bravo Sánchez\Downloads\project-bolt-sb1-d296xxbx\project\src\LendingService.Core\bin\Debug\net7.0\LendingService.Core.dll
+C:\Users\Victor Bravo Sánchez\Downloads\project-bolt-sb1-d296xxbx\project\src\LendingService.Core\bin\Debug\net7.0\LendingService.Core.pdb
+C:\Users\Victor Bravo Sánchez\Downloads\project-bolt-sb1-d296xxbx\project\src\LendingService.Core\obj\Debug\net7.0\LendingService.Core.dll
+C:\Users\Victor Bravo Sánchez\Downloads\project-bolt-sb1-d296xxbx\project\src\LendingService.Core\obj\Debug\net7.0\refint\LendingService.Core.dll
+C:\Users\Victor Bravo Sánchez\Downloads\project-bolt-sb1-d296xxbx\project\src\LendingService.Core\obj\Debug\net7.0\LendingService.Core.pdb
+C:\Users\Victor Bravo Sánchez\Downloads\project-bolt-sb1-d296xxbx\project\src\LendingService.Core\obj\Debug\net7.0\ref\LendingService.Core.dll
