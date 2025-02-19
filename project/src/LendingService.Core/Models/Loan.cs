@@ -1,8 +1,13 @@
+using LendingService.Core.Ports;
+
 namespace LendingService.Core.Models;
 
-public class Loan
+public class Loan : BaseEntity<Guid>
 {
-    public int Id { get; set; }
+    public Loan(Guid id) : base(id)
+    {
+    }
+
     public string Msisdn { get; set; } = string.Empty;
     public decimal BalanceLeft { get; set; }
     public DateTime DueDate { get; set; }

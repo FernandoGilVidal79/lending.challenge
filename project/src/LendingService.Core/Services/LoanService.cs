@@ -5,7 +5,7 @@ namespace LendingService.Core.Services;
 
 public class LoanService : ILoanService
 {
-    private readonly ConcurrentDictionary<int, Offer> _offers = new();
+    private readonly ConcurrentDictionary<Guid, Offer> _offers = new();
     private readonly ConcurrentDictionary<string, Loan> _activeLoans = new();
     private readonly HashSet<string> _knownCustomers = new();
 
@@ -24,7 +24,7 @@ public class LoanService : ILoanService
         return Task.FromResult(loan?.IsActive == true ? loan : null);
     }
 
-    public async Task<Loan> CreateLoanAsync(string msisdn, int offerId)
+    public async Task<Loan> CreateLoanAsync(string msisdn, Guid offerId)
     {
         if (!_offers.TryGetValue(offerId, out var offer))
         {
@@ -37,9 +37,9 @@ public class LoanService : ILoanService
             throw new InvalidOperationException("Customer already has an active loan");
         }
 
-        var loan = new Loan
+        var loan = new Loan(Guid.NewGuid()) // In production, use a proper ID generation strategy
         {
-            Id = new Random().Next(), // In production, use a proper ID generation strategy
+           
             Msisdn = msisdn,
             BalanceLeft = offer.Balance * (1 + offer.Taxes),
             DueDate = DateTime.UtcNow.AddDays(30), // Example: 30-day loan term

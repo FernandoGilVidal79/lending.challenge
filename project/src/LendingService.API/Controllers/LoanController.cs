@@ -34,7 +34,7 @@ public class LoanController : ControllerBase
     }
 
     [HttpPost("/customers/{msisdn}/loans")]
-    public async Task<IActionResult> CreateLoan(string msisdn, [FromForm] int id)
+    public async Task<IActionResult> CreateLoan(string msisdn, [FromForm] Guid id)
     {
         try
         {

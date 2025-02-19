@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\LendingService.Core\LendingService.Core.csproj" />
+    <ProjectReference Include="..\LendingService.Core\LendingService.Core.csproj" />
   </ItemGroup>
 
 </Project>

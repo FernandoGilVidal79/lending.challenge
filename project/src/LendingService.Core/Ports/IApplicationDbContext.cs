@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LendingService.Core.Models;
 
 namespace LendingService.Core.Ports
 {
     public interface IApplicationDbContext
     {
+        public IEntitySet<Loan> LoanSet { get; set; }
     }
 }
