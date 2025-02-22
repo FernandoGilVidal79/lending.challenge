@@ -1,4 +1,6 @@
-﻿namespace LendingService.Core.Ports
+﻿using LendingService.Core.Models;
+
+namespace LendingService.Core.Ports
 {
     public interface IEntitySet<T>
     {
@@ -9,6 +11,8 @@
 
         void Remove(T entity);
         public T Find<IBaseEntity>(int id);
-      //  public List<IBaseEntity> ToList<T>();
+
+        T GetBy<IBaseEntity>(string msisdn);
+
     }
 }

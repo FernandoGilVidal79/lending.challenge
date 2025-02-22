@@ -48,6 +48,11 @@ namespace LendingService.Infrastructure.Context
             return _offerDbSet.Find(id);
         }
 
+        public Offer GetBy<IBaseEntity>(string msisdn)
+        {
+            throw new NotImplementedException();
+        }
+
 
         //List<IBaseEntity> IEntitySet<Loan>.ToList<T>()
         //{

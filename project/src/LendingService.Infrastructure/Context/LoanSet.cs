@@ -48,9 +48,11 @@ namespace LendingService.Infrastructure.Context
             return _loanDbSet.Find(id);
         }
 
-        //List<IBaseEntity> IEntitySet<Loan>.ToList<T>()
-        //{
-        //    return _loanDbSet.ToList();
-        //}
+        Loan IEntitySet<Loan>.GetBy<IBaseEntity>(string msisdn)
+        {
+            return _loanDbSet.FirstOrDefault(x => x.Msisdn.Equals(msisdn));
+        }
+
+
     }
 }

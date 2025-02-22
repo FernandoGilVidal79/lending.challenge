@@ -41,9 +41,10 @@ public class LoanService : ILoanService
         return await Task.FromResult(offers);
     }
 
-    public Task<Loan?> GetActiveLoanAsync(string msisdn)
+    public Task<Loan> GetActiveLoanAsync(string msisdn)
     {
-        _activeLoans.TryGetValue(msisdn, out var loan);
+        var loan = _dbContext.Loans.GetBy<Loan>(msisdn);
+  
         return Task.FromResult(loan?.IsActive == true ? loan : null);
     }
 
@@ -79,7 +80,7 @@ public class LoanService : ILoanService
         var loan = await GetActiveLoanAsync(msisdn);
         if (loan == null)
         {
-            return 0;
+            throw new KeyNotFoundException("No encontrado");
         }
 
         var repaymentAmount = Math.Min(topUpAmount, loan.BalanceLeft);
