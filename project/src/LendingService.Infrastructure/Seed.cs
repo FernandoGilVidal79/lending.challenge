@@ -11,14 +11,21 @@ namespace LendingService.Infrastructure.Tests
         {
             return new List<Loan>()
             {
-                new Loan(new Guid("9e0fd50a-d636-43d4-b47c-decd0ecb483c")){ BalanceLeft= 10, DueDate = DateTime.Now.AddDays(5), Msisdn = "string", Offer = GetOffer()},
+                new Loan(){ BalanceLeft= 10, DueDate = DateTime.Now.AddDays(5), Msisdn = "string", Offer = GetOffer()},
 
             };
         }
 
+        
+
+
         public static Offer GetOffer()
         {
-            return new Offer(new Guid("b4cd3ffd-1261-44ba-a4b8-3c6228ea5b43"));
+            return new Offer() 
+            { 
+                Balance= 7, 
+                Taxes = 0.2m 
+            };     
         }
 
         public static ApplicationDbContext Create()

@@ -1,16 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LendingService.Core.Ports
 {
     public class BaseEntity<TKey> : IBaseEntity
     {
-        public BaseEntity(TKey id)
-        {
-            Id = id;
-        }
-
 
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public TKey Id { get; set; }
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LendingService.Core.Models;
+﻿using LendingService.Core.Models;
 using LendingService.Core.Ports;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,24 +8,29 @@ namespace LendingService.Infrastructure.Context
     {
         private readonly DbSet<Loan> _loanDbSet;
 
-        public LoanSet(DbSet<Loan> dealDbSet)
+        public LoanSet(DbSet<Loan> loanDbSet)
         {
-            _loanDbSet = dealDbSet;
+            _loanDbSet = loanDbSet;
         }
 
-        public void AddRange(List<Loan> deals)
+        public void AddRange(List<Loan> loans)
         {
-            _loanDbSet.AddRange(deals);
+            _loanDbSet.AddRange(loans);
         }
 
-        public void Add(Loan deal)
+        public void Add(Loan loan)
         {
-            _loanDbSet.Add(deal);
+            _loanDbSet.Add(loan);
         }
 
-        public void Remove(Loan deal)
+        public void Update(Loan loan)
         {
-            _loanDbSet.Remove(deal);
+            _loanDbSet.Update(loan); 
+        }
+
+        public void Remove(Loan loan)
+        {
+            _loanDbSet.Remove(loan);
         }
 
         public T Find<T>(int id) where T : Loan

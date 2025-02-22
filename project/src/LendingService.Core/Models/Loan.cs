@@ -2,11 +2,8 @@ using LendingService.Core.Ports;
 
 namespace LendingService.Core.Models;
 
-public class Loan : BaseEntity<Guid>
+public class Loan : BaseEntity<int>
 {
-    public Loan(Guid id) : base(id)
-    {
-    }
 
     public string Msisdn { get; set; } = string.Empty;
     public decimal BalanceLeft { get; set; }

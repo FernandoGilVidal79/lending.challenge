@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using LendingService.Core.Models;
 using LendingService.Core.Services;
+using LendingService.Infrastructure.Tests;
 using Xunit;
 
 namespace LendingService.Tests;
@@ -10,16 +11,13 @@ public class LoanServiceTests
     private readonly ILoanService _service;
     private readonly List<Offer> _testOffers;
     private const string TestMsisdn = "688777333";
-
-    private Guid Guid_Offer1 = new Guid("fe7a0f0d-3008-43b6-8bc0-72a053011f66");
-    private Guid Guid_Offer2 = new Guid("3b8893aa-3e83-4b9a-86c6-07ae8ff4173f");
-    public LoanServiceTests()
+   public LoanServiceTests()
     {
-        _service = new LoanService();
+        _service = new LoanService(Seed.Create());
         _testOffers = new List<Offer>
         {
-            new(Guid_Offer1) {Balance = 7, Taxes = 0.2m },
-            new(Guid_Offer2) {Balance = 10, Taxes = 0.7m }
+            new() {Balance = 7, Taxes = 0.2m },
+            new() {Balance = 10, Taxes = 0.7m }
         };
     }
 
@@ -34,7 +32,7 @@ public class LoanServiceTests
     public async Task CreateLoan_ShouldCreateNewLoan()
     {
         await _service.AddOrUpdateOffersAsync(_testOffers);
-        var loan = await _service.CreateLoanAsync(TestMsisdn, Guid_Offer1);
+        var loan = await _service.CreateLoanAsync(TestMsisdn, 1);
 
         Assert.NotNull(loan);
         Assert.Equal(TestMsisdn, loan.Msisdn);
@@ -45,24 +43,24 @@ public class LoanServiceTests
     public async Task CreateLoan_ShouldThrowWhenOfferNotFound()
     {
         await Assert.ThrowsAsync<KeyNotFoundException>(() => 
-            _service.CreateLoanAsync(TestMsisdn, Guid.NewGuid()));
+            _service.CreateLoanAsync(TestMsisdn, 1));
     }
 
     [Fact]
     public async Task CreateLoan_ShouldThrowWhenActiveLoanExists()
     {
         await _service.AddOrUpdateOffersAsync(_testOffers);
-        await _service.CreateLoanAsync(TestMsisdn, Guid_Offer1);
+        await _service.CreateLoanAsync(TestMsisdn, 1);
 
         await Assert.ThrowsAsync<InvalidOperationException>(() => 
-            _service.CreateLoanAsync(TestMsisdn, Guid_Offer1));
+            _service.CreateLoanAsync(TestMsisdn, 1));
     }
 
     [Fact]
     public async Task ProcessRepayment_ShouldRepayCorrectAmount()
     {
         await _service.AddOrUpdateOffersAsync(_testOffers);
-        await _service.CreateLoanAsync(TestMsisdn, Guid_Offer1);
+        await _service.CreateLoanAsync(TestMsisdn, 1);
 
         var repaid = await _service.ProcessRepaymentAsync(TestMsisdn, 5m);
         Assert.Equal(5m, repaid);
@@ -75,7 +73,7 @@ public class LoanServiceTests
     public async Task ProcessRepayment_ShouldFullyRepayLoan()
     {
         await _service.AddOrUpdateOffersAsync(_testOffers);
-        await _service.CreateLoanAsync(TestMsisdn, Guid_Offer1);
+        await _service.CreateLoanAsync(TestMsisdn, 1);
 
         var repaid = await _service.ProcessRepaymentAsync(TestMsisdn, 10m);
         Assert.Equal(8.4m, repaid);
@@ -95,7 +93,7 @@ public class LoanServiceTests
     public async Task GetActiveLoan_ShouldReturnLoanWhenActive()
     {
         await _service.AddOrUpdateOffersAsync(_testOffers);
-        await _service.CreateLoanAsync(TestMsisdn, Guid_Offer1);
+        await _service.CreateLoanAsync(TestMsisdn, 1);
 
         var loan = await _service.GetActiveLoanAsync(TestMsisdn);
         Assert.NotNull(loan);

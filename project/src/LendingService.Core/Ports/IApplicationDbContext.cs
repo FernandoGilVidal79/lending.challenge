@@ -4,6 +4,10 @@ namespace LendingService.Core.Ports
 {
     public interface IApplicationDbContext
     {
-        public IEntitySet<Loan> LoanSet { get; set; }
+        public IEntitySet<Loan> Loans { get; set; }
+
+        public IEntitySet<Offer> Offers { get; set; }
+
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken());
     }
 }

@@ -15,11 +15,14 @@ namespace LendingService.Infrastructure.Context
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
-        public IEntitySet<Loan> LoanSet { get; set; }
-
+     
         public DbSet<Loan> DbLoans { get; set; }
 
+        public DbSet<Offer> DbOffer { get; set; }
+
         private IEntitySet<Loan> _loans;
+
+        private IEntitySet<Offer> _offers;
 
 
         public IEntitySet<Loan> Loans
@@ -27,6 +30,13 @@ namespace LendingService.Infrastructure.Context
             get { return _loans ??= new LoanSet(Set<Loan>()); }
             set => _loans = value;
         }
+
+        public IEntitySet<Offer> Offers
+        {
+            get { return _offers ??= new OfferSet(Set<Offer>()); }
+            set => _offers = value;
+        }
+
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

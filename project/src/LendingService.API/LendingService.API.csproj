@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LendingService.Core\LendingService.Core.csproj" />
+    <ProjectReference Include="..\LendingService.Infrastructure\LendingService.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

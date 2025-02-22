@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace LendingService.Infrastructure
 {
-    public static  class InfrastructureExtensions
+    public static class InfrastructureExtensions
     {
         public static void AddPersistence(this IServiceCollection serviceCollection)
         {
@@ -13,7 +13,7 @@ namespace LendingService.Infrastructure
                 options.UseInMemoryDatabase("LedingServiceInMemoryDb"));
 
 
-            serviceCollection.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+            serviceCollection.AddTransient<IApplicationDbContext, ApplicationDbContext>();
         }
     }
 }

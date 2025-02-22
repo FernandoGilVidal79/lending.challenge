@@ -2,9 +2,12 @@
 {
     public interface IEntitySet<T>
     {
-        void AddRange(List<T> getDeals);
-        void Add(T deal);
-        void Remove(T deal);
+        void AddRange(List<T> entities);
+        void Add(T entity);
+
+        void Update(T entity);
+
+        void Remove(T entity);
         public T Find<IBaseEntity>(int id);
       //  public List<IBaseEntity> ToList<T>();
     }

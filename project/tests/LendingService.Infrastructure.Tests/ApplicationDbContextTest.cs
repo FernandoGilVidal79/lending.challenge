@@ -9,7 +9,7 @@ namespace LendingService.Infrastructure.Tests
         public void CanInsertLoanIntoDatabase()
         {
             using var context = Seed.Create();
-            var loan = new Loan(Guid.NewGuid());
+            var loan = new Loan();
             context.Loans.Add(loan);
             Assert.Equal(EntityState.Added, context.Entry(loan).State);
             var result = context.SaveChangesAsync();

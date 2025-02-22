@@ -1,19 +1,42 @@
 using System.Collections.Concurrent;
 using LendingService.Core.Models;
+using LendingService.Core.Ports;
 
 namespace LendingService.Core.Services;
 
 public class LoanService : ILoanService
 {
-    private readonly ConcurrentDictionary<Guid, Offer> _offers = new();
+    private readonly ConcurrentDictionary<int, Offer> _offers = new();
     private readonly ConcurrentDictionary<string, Loan> _activeLoans = new();
     private readonly HashSet<string> _knownCustomers = new();
+    private readonly IApplicationDbContext _dbContext;
+    public LoanService(IApplicationDbContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
 
     public async Task<IEnumerable<Offer>> AddOrUpdateOffersAsync(IEnumerable<Offer> offers)
     {
         foreach (var offer in offers)
         {
-            _offers.AddOrUpdate(offer.Id, offer, (_, _) => offer);
+            Offer offerUpdate = _dbContext.Offers.Find<Offer>(offer.Id);
+            if (offerUpdate == null)
+            {
+                offerUpdate = new Offer();
+                offerUpdate.Balance = offer.Balance;
+                offerUpdate.Taxes = offer.Taxes;
+                _dbContext.Offers.Add(offerUpdate);
+                
+            }
+            else
+            {
+                offerUpdate.Balance = offer.Balance;
+                offerUpdate.Taxes = offer.Taxes;
+                _dbContext.Offers.Update(offerUpdate);
+            }
+            await _dbContext.SaveChangesAsync();
+
+            
         }
         return await Task.FromResult(offers);
     }
@@ -24,7 +47,7 @@ public class LoanService : ILoanService
         return Task.FromResult(loan?.IsActive == true ? loan : null);
     }
 
-    public async Task<Loan> CreateLoanAsync(string msisdn, Guid offerId)
+    public async Task<Loan> CreateLoanAsync(string msisdn, int offerId)
     {
         if (!_offers.TryGetValue(offerId, out var offer))
         {
@@ -37,7 +60,7 @@ public class LoanService : ILoanService
             throw new InvalidOperationException("Customer already has an active loan");
         }
 
-        var loan = new Loan(Guid.NewGuid()) // In production, use a proper ID generation strategy
+        var loan = new Loan()
         {
            
             Msisdn = msisdn,
