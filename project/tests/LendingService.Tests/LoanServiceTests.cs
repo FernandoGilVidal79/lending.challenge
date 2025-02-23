@@ -63,7 +63,7 @@ public class LoanServiceTests
         await _service.CreateLoanAsync(TestMsisdn, 1);
 
         var repaid = await _service.ProcessRepaymentAsync(TestMsisdn, 5m);
-        Assert.Equal(5m, repaid);
+        Assert.Equal(5m, repaid.BalaceLeft);
 
         var loan = await _service.GetActiveLoanAsync(TestMsisdn);
         Assert.Equal(3.4m, loan?.BalanceLeft);
@@ -76,7 +76,7 @@ public class LoanServiceTests
         await _service.CreateLoanAsync(TestMsisdn, 1);
 
         var repaid = await _service.ProcessRepaymentAsync(TestMsisdn, 10m);
-        Assert.Equal(8.4m, repaid);
+        Assert.Equal(8.4m, repaid.BalaceLeft);
 
         var loan = await _service.GetActiveLoanAsync(TestMsisdn);
         Assert.Null(loan);

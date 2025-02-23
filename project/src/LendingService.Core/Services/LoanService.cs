@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using LendingService.Core.Dtos;
 using LendingService.Core.Models;
 using LendingService.Core.Ports;
 
@@ -25,8 +26,7 @@ public class LoanService : ILoanService
                 offerUpdate = new Offer();
                 offerUpdate.Balance = offer.Balance;
                 offerUpdate.Taxes = offer.Taxes;
-                _dbContext.Offers.Add(offerUpdate);
-                
+                _dbContext.Offers.Add(offerUpdate);      
             }
             else
             {
@@ -43,14 +43,16 @@ public class LoanService : ILoanService
 
     public Task<Loan> GetActiveLoanAsync(string msisdn)
     {
-        var loan = _dbContext.Loans.GetBy<Loan>(msisdn);
-  
+        var loan = _dbContext.Loans.GetBy<Loan>(msisdn); 
         return Task.FromResult(loan?.IsActive == true ? loan : null);
     }
 
     public async Task<Loan> CreateLoanAsync(string msisdn, int offerId)
     {
-        if (!_offers.TryGetValue(offerId, out var offer))
+
+        var offer = _dbContext.Offers.Find<Loan>(offerId);
+
+        if (offer == null)
         {
             throw new KeyNotFoundException("Offer not found");
         }
@@ -63,19 +65,19 @@ public class LoanService : ILoanService
 
         var loan = new Loan()
         {
-           
             Msisdn = msisdn,
             BalanceLeft = offer.Balance * (1 + offer.Taxes),
             DueDate = DateTime.UtcNow.AddDays(30), // Example: 30-day loan term
             Offer = offer
         };
 
-        _activeLoans.TryAdd(msisdn, loan);
+        _dbContext.Loans.Add(loan);
+        _dbContext.SaveChangesAsync();
         _knownCustomers.Add(msisdn);
         return loan;
     }
 
-    public async Task<decimal> ProcessRepaymentAsync(string msisdn, decimal topUpAmount)
+    public async Task<ProcessRepayment> ProcessRepaymentAsync(string msisdn, decimal topUpAmount)
     {
         var loan = await GetActiveLoanAsync(msisdn);
         if (loan == null)
@@ -88,10 +90,16 @@ public class LoanService : ILoanService
 
         if (loan.BalanceLeft <= 0)
         {
-            _activeLoans.TryRemove(msisdn, out _);
+            _dbContext.Loans.Remove(loan);
+            _dbContext.SaveChangesAsync();
         }
 
-        return repaymentAmount;
+        return new ProcessRepayment()
+        {
+            BalaceLeft = loan.BalanceLeft,
+            DueDate = DateTime.UtcNow,
+            Id = loan.Id,
+        };
     }
     public Task<bool> CustomerExistsAsync(string msisdn)
     {

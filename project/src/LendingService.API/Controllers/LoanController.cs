@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using LendingService.Core.Services;
 using LendingService.Core.Models;
+using LendingService.Core.Dtos;
 
 namespace LendingService.API.Controllers;
 
@@ -57,7 +58,7 @@ public class LoanController : ControllerBase
     }
 
     [HttpPut("/customers/{msisdn}/loans")]
-    public async Task<IActionResult> ProcessRepayment(string msisdn, [FromForm] decimal topUp)
+    public async Task<ActionResult<ProcessRepayment>> ProcessRepayment(string msisdn, [FromForm] decimal topUp)
     {
         // First check if customer exists by trying to get their loan
         var loan = await _loanService.GetActiveLoanAsync(msisdn);
@@ -75,7 +76,7 @@ public class LoanController : ControllerBase
         }
 
         var repaidAmount = await _loanService.ProcessRepaymentAsync(msisdn, topUp);
-        return Ok(new { Repaid = repaidAmount });
+        return Ok (new { Repaid = repaidAmount });
     }
 
     [HttpGet("/customers/{msisdn}/loans")]
