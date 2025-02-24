@@ -12,7 +12,9 @@ namespace LendingService.Core.Ports
         void Remove(T entity);
         public T Find<IBaseEntity>(int id);
 
-        T GetBy<IBaseEntity>(string msisdn);
+        public T GetBy<IBaseEntity>(string msisdn);
+
+        public List<T> ToList();
 
     }
 }

@@ -38,25 +38,19 @@ namespace LendingService.Infrastructure.Context
             return _offerDbSet.Find(id) as T;
         }
 
-        public List<T> ToList<T>() where T : Offer
-        {
-            return _offerDbSet.ToList() as List<T>;
-        }
-
         Offer IEntitySet<Offer>.Find<IBaseEntity>(int id)
         {
             return _offerDbSet.Find(id);
         }
 
-        public Offer GetBy<IBaseEntity>(string msisdn)
+        Offer IEntitySet<Offer>.GetBy<IBaseEntity>(string msisdn)
         {
             throw new NotImplementedException();
         }
 
-
-        //List<IBaseEntity> IEntitySet<Loan>.ToList<T>()
-        //{
-        //    return _loanDbSet.ToList();
-        //}
+        public List<Offer> ToList()
+        {
+            return _offerDbSet.ToList();
+        }
     }
 }

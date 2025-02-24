@@ -33,14 +33,9 @@ namespace LendingService.Infrastructure.Context
             _loanDbSet.Remove(loan);
         }
 
-        public T Find<T>(int id) where T : Loan
+        public List<Loan> ToList() 
         {
-            return _loanDbSet.Find(id) as T;
-        }
-
-        public List<T> ToList<T>() where T : Loan
-        {
-            return _loanDbSet.ToList() as List<T>;
+            return _loanDbSet.ToList();
         }
 
         Loan IEntitySet<Loan>.Find<IBaseEntity>(int id)
@@ -50,9 +45,8 @@ namespace LendingService.Infrastructure.Context
 
         Loan IEntitySet<Loan>.GetBy<IBaseEntity>(string msisdn)
         {
-            return _loanDbSet.FirstOrDefault(x => x.Msisdn.Equals(msisdn));
+            return _loanDbSet.Where(x => x.Msisdn.Equals(msisdn)).Include(x => x.Offer).FirstOrDefault();
         }
-
 
     }
 }
