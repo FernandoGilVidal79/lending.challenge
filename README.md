@@ -118,3 +118,13 @@ but please bear in ming we want to see your best!
 - Document your decissions using PRs or in this very README adding sections to it,
   the same way you would be generating documentation for any other deliverable.
 - It is supposed the service will run in-memory. In case you need any repository, please justify it.
+
+
+# Solution
+- I've added Entity Framework as Repository. 
+
+
+# Improvements
+- Apply Unit Of Work Repository.
+- Apply .NET Cache for some entities. (maybe knowCustomers)
+- 
