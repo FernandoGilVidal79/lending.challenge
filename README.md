@@ -119,12 +119,13 @@ but please bear in ming we want to see your best!
   the same way you would be generating documentation for any other deliverable.
 - It is supposed the service will run in-memory. In case you need any repository, please justify it.
 
-
 # Solution
-- I've added Entity Framework as Repository. 
-
+- Added Entity Framework as Repository, using Clean Architecture to create a Infrastructure Layer 
+- Add UnitTest example to Infrastructure Layer to tests Entities
+- Creating Some Dtos to control Responses Dto over entities (somed examples)
+- Add IEntitySet infrastructure to operate with entities
 
 # Improvements
 - Apply Unit Of Work Repository.
-- Apply .NET Cache for some entities. (maybe knowCustomers)
-- 
+- Apply .NET Cache for some entities, Redis
+- Can be improved with Result pattern and global exception handling middleware
