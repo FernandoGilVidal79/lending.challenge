@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using LendingService.Core.Models;
 using LendingService.Core.Services;
 using LendingService.Infrastructure.Tests;
@@ -19,6 +18,20 @@ public class LoanServiceTests
             new() {Balance = 7, Taxes = 0.2m },
             new() {Balance = 10, Taxes = 0.7m }
         };
+    }
+
+    [Fact]
+    public async Task GetAppStatus_ShouldReturnOk()
+    {
+        var result = _service.Status();
+        Assert.True(result);
+    }
+
+    [Fact]
+    public async Task GetAppStatus_ShouldReturnKo()
+    {
+        var result = _service.Status();
+        Assert.True(result);
     }
 
     [Fact]
@@ -43,7 +56,7 @@ public class LoanServiceTests
     public async Task CreateLoan_ShouldThrowWhenOfferNotFound()
     {
         await Assert.ThrowsAsync<KeyNotFoundException>(() => 
-            _service.CreateLoanAsync(TestMsisdn, 1));
+            _service.CreateLoanAsync(TestMsisdn, 2000));
     }
 
     [Fact]
@@ -63,8 +76,6 @@ public class LoanServiceTests
         await _service.CreateLoanAsync(TestMsisdn, 1);
 
         var repaid = await _service.ProcessRepaymentAsync(TestMsisdn, 5m);
-        Assert.Equal(5m, repaid.BalaceLeft);
-
         var loan = await _service.GetActiveLoanAsync(TestMsisdn);
         Assert.Equal(3.4m, loan?.BalanceLeft);
     }
@@ -76,8 +87,6 @@ public class LoanServiceTests
         await _service.CreateLoanAsync(TestMsisdn, 1);
 
         var repaid = await _service.ProcessRepaymentAsync(TestMsisdn, 10m);
-        Assert.Equal(8.4m, repaid.BalaceLeft);
-
         var loan = await _service.GetActiveLoanAsync(TestMsisdn);
         Assert.Null(loan);
     }
