@@ -20,8 +20,8 @@ var app = builder.Build();
 using (var serviceScope = app.Services.CreateScope())
 {
     var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
-    context.Offers.Add(Seed.GetOffer());
-    context.Loans.AddRange(Seed.GetMockLoans());
+    //Adding 10^3 Loans
+    context.Loans.AddRange(Seed.GetMockMultipleLoans());
     context.SaveChanges();
 }
 

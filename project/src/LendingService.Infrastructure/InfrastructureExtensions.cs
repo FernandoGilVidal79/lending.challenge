@@ -10,7 +10,7 @@ namespace LendingService.Infrastructure
         public static void AddPersistence(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddDbContext<ApplicationDbContext>(options =>
-                options.UseInMemoryDatabase("LedingServiceInMemoryDb"));
+                options.UseInMemoryDatabase("LendingServiceInMemoryDb"));
 
 
             serviceCollection.AddTransient<IApplicationDbContext, ApplicationDbContext>();
