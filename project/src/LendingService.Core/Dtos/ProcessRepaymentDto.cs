@@ -1,6 +1,6 @@
 ﻿namespace LendingService.Core.Dtos
 {
-    public class ProcessRepayment
+    public class ProcessRepaymentDto
     {
         public int Id { get; set; }
 
