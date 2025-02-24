@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using LendingService.Core.Dtos;
 using LendingService.Core.Models;
 using LendingService.Core.Ports;
@@ -7,13 +6,29 @@ namespace LendingService.Core.Services;
 
 public class LoanService : ILoanService
 {
-    private readonly ConcurrentDictionary<int, Offer> _offers = new();
-    private readonly ConcurrentDictionary<string, Loan> _activeLoans = new();
-    private readonly HashSet<string> _knownCustomers = new();
+    private readonly static HashSet<string> _knownCustomers = new();
     private readonly IApplicationDbContext _dbContext;
     public LoanService(IApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
+    }
+
+    public bool Status()
+    {
+        try
+        {
+            var loans = _dbContext.Loans.ToList();
+            foreach (var loan in loans)
+            {
+                _knownCustomers.Add(loan.Msisdn);
+            }
+        }
+
+        catch (Exception)
+        {
+            return false;
+        }
+        return true;
     }
 
     public async Task<IEnumerable<Offer>> AddOrUpdateOffersAsync(IEnumerable<Offer> offers)
@@ -34,9 +49,7 @@ public class LoanService : ILoanService
                 offerUpdate.Taxes = offer.Taxes;
                 _dbContext.Offers.Update(offerUpdate);
             }
-            await _dbContext.SaveChangesAsync();
-
-            
+            await _dbContext.SaveChangesAsync();          
         }
         return await Task.FromResult(offers);
     }
@@ -49,9 +62,7 @@ public class LoanService : ILoanService
 
     public async Task<Loan> CreateLoanAsync(string msisdn, int offerId)
     {
-
         var offer = _dbContext.Offers.Find<Loan>(offerId);
-
         if (offer == null)
         {
             throw new KeyNotFoundException("Offer not found");
@@ -72,12 +83,12 @@ public class LoanService : ILoanService
         };
 
         _dbContext.Loans.Add(loan);
-        _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
         _knownCustomers.Add(msisdn);
         return loan;
     }
 
-    public async Task<ProcessRepayment> ProcessRepaymentAsync(string msisdn, decimal topUpAmount)
+    public async Task<ProcessRepaymentDto> ProcessRepaymentAsync(string msisdn, decimal topUpAmount)
     {
         var loan = await GetActiveLoanAsync(msisdn);
         if (loan == null)
@@ -91,10 +102,10 @@ public class LoanService : ILoanService
         if (loan.BalanceLeft <= 0)
         {
             _dbContext.Loans.Remove(loan);
-            _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
-        return new ProcessRepayment()
+        return new ProcessRepaymentDto()
         {
             BalaceLeft = loan.BalanceLeft,
             DueDate = DateTime.UtcNow,
@@ -105,5 +116,4 @@ public class LoanService : ILoanService
     {
         return Task.FromResult(_knownCustomers.Contains(msisdn));
     }
-
 }

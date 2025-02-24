@@ -14,11 +14,14 @@ public class LoanController : ControllerBase
     public LoanController(ILoanService loanService)
     {
         _loanService = loanService;
+        _loanService.Status();
     }
 
     [HttpGet("/status")]
     public IActionResult GetStatus()
     {
+        if (!_loanService.Status())
+            return BadRequest(false);
         return Ok();
     }
 
@@ -58,7 +61,7 @@ public class LoanController : ControllerBase
     }
 
     [HttpPut("/customers/{msisdn}/loans")]
-    public async Task<ActionResult<ProcessRepayment>> ProcessRepayment(string msisdn, [FromForm] decimal topUp)
+    public async Task<ActionResult<ProcessRepaymentDto>> ProcessRepayment(string msisdn, [FromForm] decimal topUp)
     {
         // First check if customer exists by trying to get their loan
         var loan = await _loanService.GetActiveLoanAsync(msisdn);
@@ -80,7 +83,7 @@ public class LoanController : ControllerBase
     }
 
     [HttpGet("/customers/{msisdn}/loans")]
-    public async Task<IActionResult> GetActiveLoan(string msisdn)
+    public async Task<ActionResult<GetActiveLoanDto>> GetActiveLoan(string msisdn)
     {
         if (!await _loanService.CustomerExistsAsync(msisdn))
         {
